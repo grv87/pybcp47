@@ -16,7 +16,6 @@
 
 import codecs
 import os
-from pkg_resources import resource_string
 import re
 import string
 
@@ -52,7 +51,8 @@ class Bcp47LanguageParser(object):
     # http://tools.ietf.org/html/rfc5646
     file_name = 'language-subtag-registry.txt'
     # Read Unicode string from the UTF-8 bytes in the file.
-    file_string_utf8 = resource_string(__name__, file_name).decode('utf-8')
+    with open(file_name, 'rb') as f:
+      file_string_utf8 = f.read().decode('utf-8')
     # Yield the lines from the file. Handle "folding" indicated by two leading
     # whitespaces.
     accumulated_line_parts = None

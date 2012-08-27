@@ -50,8 +50,10 @@ class Bcp47LanguageParser(object):
     # Formatting rules of this file can be found at page 20 of
     # http://tools.ietf.org/html/rfc5646
     file_name = 'language-subtag-registry.txt'
+    file_path = os.path.join(
+      os.path.dirname(os.path.abspath(__file__)), file_name)
     # Read Unicode string from the UTF-8 bytes in the file.
-    with open(file_name, 'rb') as f:
+    with open(file_path, 'rb') as f:
       file_string_utf8 = f.read().decode('utf-8')
     # Yield the lines from the file. Handle "folding" indicated by two leading
     # whitespaces.

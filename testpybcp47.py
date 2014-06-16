@@ -1,4 +1,4 @@
-#!/usr/bin/python2.5
+#!/usr/bin/python3
 
 # Copyright (C) 2011 Google Inc.
 #
@@ -90,3 +90,7 @@ class PyBcp47TestCase(unittest.TestCase):
             lang_obj.valid, should_be_valid,
             "the language code '%s' (%s) should%s be valid" %
             (tag, lang_obj, str((not should_be_valid and " not") or "")))
+
+  def runTest(self):
+    self.testRegistryFileRecordsBeingWellformed()
+    self.testValidationWithSamples()

@@ -1,4 +1,4 @@
-#!/usr/bin/python2.5
+#!/usr/bin/python3
 
 # Copyright (C) 2011 Google Inc.
 #
@@ -18,6 +18,7 @@ import codecs
 import os
 import re
 import string
+from functools import reduce
 
 class FileParseError(Exception):
   """Exception raised for errors in the subtag registry file. """
@@ -76,11 +77,11 @@ class Bcp47LanguageParser(object):
     # Load the entries from the registry file in this package.
     line_iterator = self._GetLinesFromLanguageSubtagRegistryFile()
     # Read the header lines with the File-Date record.
-    first_line, line_number = line_iterator.next()
+    first_line, line_number = next(line_iterator)
     if not first_line[:11] == 'File-Date: ':
       raise FileParseError(line_number,
           "Invalid first line '%s'! Must be a File-Date record." % (first_line))
-    second_line, line_number = line_iterator.next()
+    second_line, line_number = next(line_iterator)
     if not second_line == '%%':
       raise FileParseError(line_number,
           "Invalid first record '%s'! Must start with '%%%%'." % (second_line))
@@ -137,13 +138,13 @@ class Bcp47LanguageParser(object):
                                     line_number)
 
   def IntStr26ToInt(self, int_str):
-    return reduce(lambda x, y: 26 * x + y, map(string.lowercase.index, int_str))
+    return reduce(lambda x, y: 26 * x + y, map(string.ascii_lowercase.index, int_str))
 
   def IntToIntStr26(self, int_value, int_str=''):
     if int_value == 0:
       return int_str
     return self.IntToIntStr26(
-        int_value/26, string.lowercase[int_value%26] + int_str)
+        int_value//26, string.ascii_lowercase[int_value%26] + int_str)
 
   def _AddSubtagFromRegistryFile(self, current_type, current_tag,
                                  current_descriptions, current_prefixes,
